@@ -12,7 +12,7 @@ namespace HajjProduct.Api.Authentication.Services;
 
 public class AuthServices (ApplicationDbContext context, IOptionsMonitor<JwtConfig> optionsMonitor)
 {
-    public async Task<TokenData> GenerateJwtTokenAsync(User user)
+    public async Task<TokenData> GenerateJwtTokenAsync(User user, string langId)
     {
         var key = Encoding.ASCII.GetBytes(optionsMonitor.CurrentValue.secret);
         var jwtHandler = new JwtSecurityTokenHandler();
@@ -26,6 +26,7 @@ public class AuthServices (ApplicationDbContext context, IOptionsMonitor<JwtConf
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim("Id", user.Id.ToString()),
+                new Claim("LangId", langId),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.NameId,user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
